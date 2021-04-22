@@ -1,8 +1,17 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Body
+from pydantic import BaseModel
 
 app = FastAPI()
 
 list_of_usernames = list()
+
+
+class NameValues(BaseModel):
+    name: str = None
+    country: str
+    age: int
+    base_salary: float
+
 
 @app.get("/home/{user_name}")
 def write_home(user_name: str, query):
@@ -13,34 +22,10 @@ def write_home(user_name: str, query):
     }
 
 
-@app.put("/username/{user_name}")
-def put_data(user_name: str):
-    print(user_name)
-    list_of_usernames.append(user_name)
-    return {
-        "username": user_name
-    }
-
-
 @app.post("/postData")
-def post_data(user_name: str):
-    list_of_usernames.append(user_name)
+def post_data(name_value: NameValues, spousal_status: str = Body(...)):
+    print(name_value)
     return {
-        "usernames":list_of_usernames
-    }
-
-
-@app.delete("/deleteData/{user_name}")
-def delete_data(user_name: str):
-    list_of_usernames.remove(user_name)
-    return {
-        "usernames": list_of_usernames
-    }
-
-
-@app.api_route("/homedata", methods=['GET', 'POST', 'PUT', 'DELETE'])
-def handle_homedata(username: str):
-    print(username)
-    return {
-        "username":username
+        "name": name_value.name,
+        "spousal_status": spousal_status
     }
