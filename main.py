@@ -1,9 +1,12 @@
-from fastapi import FastAPI, Body
+from fastapi import FastAPI, Body, Request
 from pydantic import BaseModel
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
 
 app = FastAPI()
 
 list_of_usernames = list()
+templates = Jinja2Templates(directory="htmldirectory")
 
 
 class NameValues(BaseModel):
@@ -13,13 +16,9 @@ class NameValues(BaseModel):
     base_salary: float
 
 
-@app.get("/home/{user_name}")
-def write_home(user_name: str, query):
-    return {
-        "Name": user_name,
-        "Age": 24,
-        "query": query
-    }
+@app.get("/home/{user_name}", response_class=HTMLResponse)
+def write_home(request: Request, user_name: str):
+    return templates.TemplateResponse("home.html", {"request": request, "username": user_name})
 
 
 @app.post("/postData")
