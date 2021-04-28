@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HOME</title>
+</head>
+<body>
+<h1>THIS IS THE HOME PAGE</h1>
+
+<h2>USERNAME = {{ username }}</h2>
+
+<form action="/submitform" method="post" enctype="multipart/form-data">
+    <input type="text" name="assignment">
+    <input type="file" name="assignment_file" multiple>
+    <input type="submit">
+</form>
+
+</body>
+</html>
