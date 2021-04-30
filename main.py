@@ -1,14 +1,30 @@
-from fastapi import FastAPI, Body, Request, File, UploadFile, Form, Depends
+from fastapi import FastAPI, Body, Request, File, UploadFile, Form, Depends, BackgroundTasks
 from pydantic import BaseModel
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+import time
 app = FastAPI()
 
 list_of_usernames = list()
 templates = Jinja2Templates(directory="htmldirectory")
 
 oauth_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
+
+def handle_email_background(email: str, data: str):
+    print(email)
+    print(data)
+    for i in range(100):
+        print(i)
+        time.sleep(0.1)
+
+
+@app.get("/users/email")
+async def handle_email(email: str, background_task: BackgroundTasks):
+    print(email)
+    background_task.add_task(handle_email_background, email, "THIS IS A SAMPLE BACKGROUND TASK MANAGER")
+    return {"user": "baradwaj", "message": "Mail Sent"}
 
 
 @app.post("/token")
